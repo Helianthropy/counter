@@ -31,10 +31,15 @@
 	function addCount() {
 		deathCount++;
 		saveDeaths();
+		updateCount();
 	}
 	function subCount() {
 		deathCount--;
 		saveDeaths();
+		updateCount();
+	}
+	function updateCount() {
+		document.getElementById("counter").innerHTML = deathCount;
 	}
 	function saveDeaths(){
 		localStorage('deathCount', deathCount);
