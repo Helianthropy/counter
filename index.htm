@@ -25,13 +25,18 @@
 	}
 </style>
 <script type="text/javascript">
-	deathCount = 0;
-	try {
-		storedDeathCount = localStorage.getItem('deathCount');
+	function initialize() {
+		deathCount = 0;
+		try {
+			storedDeathCount = localStorage.getItem('deathCount');
+		}
+		catch (e) {
+		}
+		if(storedDeathCount) {
+			deathCount = storedDeathCount;
+			updateCount();
+		}
 	}
-	catch (e) {
-	}
-	if(storedDeathCount) deathCount = storedDeathCount;
 	function addCount() {
 		deathCount++;
 		saveDeaths();
@@ -59,6 +64,7 @@
 		document.getElementById("plus").onclick = function() {
 			addCount();
 		}
+		initialize();
 	};
 </script>
 </head>
