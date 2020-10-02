@@ -47,7 +47,7 @@
 	}
 	function saveDeaths(){
 		try {
-			localStorage('deathCount', deathCount);
+			localStorage.setItem('deathCount', deathCount);
 		}
 		catch (e) {
 		}
