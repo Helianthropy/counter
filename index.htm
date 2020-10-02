@@ -14,24 +14,71 @@
 		text-shadow: 0em 0em 0.1em black;
 		text-align: center;
 	}
+	div#counter::before {
+		display: none;
+	}
+	div#counter.anim::before {
+		display: block;
+		font-size: 50px;
+		margin: auto;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		text-shadow: 0em 0em 0.2em black;
+		animation-duration: 0.75s;
+		animation-name: vanish;
+		opacity: 0.0;
+		background-color: transparent;
+	}
+	.death::before {
+		content: "💀";
+	}
+	.life::before {
+		content: "🔙";
+	}
+	.reset::before {
+		content: "❌";
+		margin-left: -50px !important;
+	}
 	#buttons {
 		text-align: center;
 	}
 	#buttons div {
-		width: 10em;
-		height: 1em;
-		border-radius: 0.1em;
+		width: 5em;
+		margin: 0em 2.5em;
+		padding: 0.25em;
+		border-radius: 0.4rem;
 		display: inline-block;
 		font-size: 50px;
 		font-weight: 800;
 		cursor: pointer;
+		background-color: #ddd;
 	}
-	div#chroma {
+	#buttons div:hover {
+		background-color: #eee;
+	}
+	div#chroma, div#reset, div#anim {
 		font-size: 10px;
+	}
+	
+	/*Animations*/
+	@keyframes vanish {
+		from {
+			opacity: 0.9;
+			font-size: 500px;
+		}
+		20% {
+			opacity: 0.9;
+		}
+		to {
+			opacity: 0.0;
+			font-size: 50px;
+		}
 	}
 </style>
 <script type="text/javascript">
-	deathCount = 0;
+	var deathCount = 0;
 	function refreshCount() {
 		try {
 			storedDeathCount = localStorage.getItem('deathCount');
@@ -42,16 +89,27 @@
 			deathCount = storedDeathCount;
 			updateCount();
 		}
-		window.setInterval(refreshCount, 1000);
+		//window.setInterval(refreshCount, 1000);
 	}
 	function addCount() {
 		deathCount++;
 		saveDeaths();
+		document.getElementById("counter").classList.toggle('death');
+		window.setTimeout(resetAnimation, 750, 'counter', 'death');
 		updateCount();
 	}
 	function subCount() {
 		deathCount--;
 		saveDeaths();
+		document.getElementById("counter").classList.toggle('life');
+		window.setTimeout(resetAnimation, 750, 'counter', 'life');
+		updateCount();
+	}
+	function resetCount() {
+		deathCount = 0;
+		saveDeaths();
+		document.getElementById("counter").classList.toggle('reset');
+		window.setTimeout(resetAnimation, 750, 'counter', 'reset');
 		updateCount();
 	}
 	function updateCount() {
@@ -64,6 +122,9 @@
 		catch (e) {
 		}
 	}
+	function resetAnimation(elementID, attribute) {
+		document.getElementById(elementID).classList.toggle(attribute);
+	}
 	window.onload = function() {
 		document.getElementById("minus").onclick = function() {
 			subCount();
@@ -71,8 +132,14 @@
 		document.getElementById("plus").onclick = function() {
 			addCount();
 		}
+		document.getElementById("reset").onclick = function() {
+			resetCount();
+		}
 		document.getElementById("chroma").onclick = function() {
 			document.getElementsByTagName("body")[0].classList.toggle('chromakey');
+		}
+		document.getElementById("anim").onclick = function() {
+			document.getElementById("counter").classList.toggle('anim');
 		}
 		refreshCount();
 	};
@@ -83,7 +150,9 @@
 <div id="buttons">
 	<div id="minus">-</div>
 	<div id="plus">+</div><br />
+	<div id="reset">Reset</div>
 	<div id="chroma">Green<br />Screen</div>
+	<div id="anim">Animation</div>
 </div>
 </body>
 </html>
