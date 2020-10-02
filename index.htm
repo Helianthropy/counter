@@ -31,6 +31,7 @@
 	}
 </style>
 <script type="text/javascript">
+	deathCount = 0;
 	function refreshCount() {
 		try {
 			storedDeathCount = localStorage.getItem('deathCount');
@@ -41,7 +42,7 @@
 			deathCount = storedDeathCount;
 			updateCount();
 		}
-		window.setInterval(this, 500);
+		window.setInterval(refreshCount, 1000);
 	}
 	function addCount() {
 		deathCount++;
@@ -73,6 +74,7 @@
 		document.getElementById("chroma").onclick = function() {
 			document.getElementsByTagName("body")[0].classList.toggle('chromakey');
 		}
+		refreshCount();
 	};
 </script>
 </head>
